@@ -148,6 +148,18 @@ iD.ui.Background = function(context) {
             setVisible(!button.classed('active'));
         }
 
+        function nextBg() {
+          bgLayerList = content.select('.bg-layer-list').selectAll('.layer');
+          i = bgLayerList[0].indexOf(bgLayerList.filter('.active')[0][0]);
+          bgLayerList.selectAll('input')[(i+1) % bgLayerList[0].length][0].click();
+        }
+
+        function prevBg() {
+          bgLayerList = content.select('.bg-layer-list').selectAll('.layer');
+          i = bgLayerList[0].indexOf(bgLayerList.filter('.active')[0][0]);
+          bgLayerList.selectAll('input')[(i-1) % bgLayerList[0].length][0].click();
+        }
+
         function setVisible(show) {
             if (show !== shown) {
                 button.classed('active', show);
@@ -215,7 +227,7 @@ iD.ui.Background = function(context) {
             .style('opacity', function(d) { return 1.25 - d; });
 
         var backgroundList = content.append('ul')
-            .attr('class', 'layer-list');
+            .attr('class', 'layer-list bg-layer-list');
 
         var custom = backgroundList.append('li')
             .attr('class', 'custom_layer')
@@ -315,6 +327,8 @@ iD.ui.Background = function(context) {
 
         var keybinding = d3.keybinding('background')
             .on(key, toggle)
+            .on('N', nextBg)
+            .on('P', prevBg)
             .on('F', hide)
             .on('H', hide);
 
